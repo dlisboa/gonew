@@ -1,6 +1,6 @@
 # Change these
-MAIN_PACKAGE_PATH := ./cmd/example
-BINARY_NAME := example
+MAIN_PACKAGE_PATH := ./cmd/server
+BINARY_NAME := server
 
 ## help: print usage
 help:
@@ -14,15 +14,15 @@ tidy:
 
 ## build: build the app
 build:
-	go build ${MAIN_PACKAGE_PATH}
+	go build -o=./bin/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
 ## clean: clean build artifacts
 clean:
-	rm ./${BINARY_NAME}
+	rm ./bin/${BINARY_NAME}
 
 ## run: run the app
 run: build
-	./${BINARY_NAME}
+	./bin/${BINARY_NAME}
 
 ## run/live: run the app with reloading
 run/live:
