@@ -1,17 +1,17 @@
 name: E2E testing
 on: [push, pull_request]
 jobs:
-  test:
-    timeout-minutes: 60
+  browser_test:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./testing/e2e
+        working-directory: ./testing/browser
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 20
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers

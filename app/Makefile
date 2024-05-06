@@ -12,6 +12,7 @@ tidy:
 
 ## build: build the app
 build:
+	go mod tidy
 	go build -o=./bin/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
 ## clean: clean build artifacts
@@ -28,7 +29,7 @@ run/live:
 
 ## test: run all tests
 test:
-	go test -v -race -buildvcs ./...
+	go test -v -race ./...
 
 ## test: run all tests with reloading
 test/live:
