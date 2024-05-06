@@ -1,9 +1,5 @@
-name: Playwright Tests
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+name: E2E testing
+on: [push, pull_request]
 jobs:
   test:
     timeout-minutes: 60
@@ -27,4 +23,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
+          retention-days: 7

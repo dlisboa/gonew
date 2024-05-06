@@ -19,12 +19,12 @@ clean:
 	rm ./bin/${BINARY_NAME}
 
 ## run: run the app
-run: build
-	./bin/${BINARY_NAME}
+run:
+	godotenv go run ${MAIN_PACKAGE_PATH}
 
 ## run/live: run the app with reloading
 run/live:
-	reflex -r '\.go|tmpl' -R '_test\.go' -s go run ${MAIN_PACKAGE_PATH}
+	reflex -r '\.go|tmpl' -R '_test\.go' -s godotenv go run ${MAIN_PACKAGE_PATH}
 
 ## test: run all tests
 test:
