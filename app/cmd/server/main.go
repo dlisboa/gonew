@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
 	"log"
-	// add the internal/server package here
+	"os"
+
+	"github.com/dlisboa/go-templates/app/internal/server"
 )
 
 func main() {
-	if err := server.Run(); err != nil {
+	ctx := context.Background()
+	if err := server.Run(ctx, os.Args, os.Getenv, os.Stdout); err != nil {
 		log.Fatal(err)
+		os.Exit(1)
 	}
 }

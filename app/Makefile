@@ -33,7 +33,7 @@ test:
 
 ## test: run all tests with reloading
 test/live:
-	reflex -r '\.go|tmpl' -s go test -v -race -buildvcs ./...
+	reflex -r '\.go|\.tmpl' -s go test -v -race -buildvcs ./...
 
 ## lint: run linters
 lint:
@@ -43,12 +43,17 @@ lint:
 lint/fix:
 	golangci-lint run --fix ./...
 
+## sqlc: generate sqlc code
+sqlc:
+	sqlc -f db/sqlc.yml generate
+
 ## deps: install dev and prod deps
 deps:
 	go mod tidy
+	go install github.com/joho/godotenv/cmd/godotenv@latest
 	go install github.com/cespare/reflex@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/amacneil/dbmate/v2@v2.14.0
-	go install github.com/joho/godotenv/cmd/godotenv@latest
+	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 
-.PHONY: help tidy build clean run run/live test test/live lint lint/fix deps
+.PHONY: help tidy build clean run run/live test test/live lint lint/fix sqlc deps
