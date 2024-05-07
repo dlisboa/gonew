@@ -12,7 +12,7 @@ tidy:
 
 ## build: build the app
 build:
-	go get ${MAIN_PACKAGE_PATH}
+	go mod download
 	go build -o=./bin/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
 ## clean: clean build artifacts

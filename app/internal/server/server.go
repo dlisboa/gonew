@@ -37,6 +37,7 @@ func Run(ctx context.Context, args []string, out io.Writer, getenv func(string) 
 		Handler: handlers.NewRouter(),
 	}
 
+	logger.Info("listening on " + srv.Addr)
 	return srv.ListenAndServe()
 }
 
