@@ -22,7 +22,7 @@ func Run(ctx context.Context, args []string, getenv envFunc, out io.Writer) erro
 
 	logger := slog.New(logHandler(out, cfg))
 
-	db, err := sql.Open("sqlite3", cfg.DBURL)
+	db, err := sql.Open("sqlite3", cfg.DatabaseSourceName)
 	if err != nil {
 		return err
 	}
