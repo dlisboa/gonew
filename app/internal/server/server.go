@@ -10,6 +10,9 @@ import (
 
 	"github.com/caarlos0/env/v11"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/unrolled/render"
+
+	"github.com/dlisboa/gonew/app/internal/assets"
 )
 
 func Run(ctx context.Context, args []string, out io.Writer, getenv func(string) string) error {
@@ -26,10 +29,17 @@ func Run(ctx context.Context, args []string, out io.Writer, getenv func(string) 
 	}
 	defer db.Close()
 
+	r := render.New(render.Options{
+		FileSystem: &render.EmbedFileSystem{
+			FS: assets.FS,
+		},
+	})
+
 	handlers := &Handlers{
 		config: cfg,
 		logger: logger,
 		db:     db,
+		render: r,
 	}
 
 	srv := http.Server{
