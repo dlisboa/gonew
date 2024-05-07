@@ -1,4 +1,4 @@
-module github.com/dlisboa/go-templates/app
+module github.com/dlisboa/gonew/app
 
 go 1.22.2
 

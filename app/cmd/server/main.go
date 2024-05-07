@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/dlisboa/go-templates/app/internal/server"
+	"github.com/dlisboa/gonew/app/internal/server"
 )
 
 func main() {

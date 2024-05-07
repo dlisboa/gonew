@@ -12,7 +12,7 @@ tidy:
 
 ## build: build the app
 build:
-	go mod tidy
+	go get ${MAIN_PACKAGE_PATH}
 	go build -o=./bin/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
 ## clean: clean build artifacts
@@ -25,7 +25,7 @@ run:
 
 ## run/live: run the app with reloading
 run/live:
-	reflex -r '\.go|tmpl' -R '_test\.go' -s godotenv go run ${MAIN_PACKAGE_PATH}
+	reflex -r '\.go|\.tmpl|\.env' -R '_test\.go' -s godotenv go run ${MAIN_PACKAGE_PATH}
 
 ## test: run all tests
 test:

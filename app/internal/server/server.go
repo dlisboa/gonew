@@ -48,5 +48,4 @@ func logHandler(out io.Writer, cfg config) slog.Handler {
 		return slog.NewJSONHandler(out, opts)
 	}
 	return slog.NewTextHandler(out, opts)
-
 }
