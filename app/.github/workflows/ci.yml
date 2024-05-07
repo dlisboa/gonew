@@ -2,7 +2,7 @@ name: CI
 on: [push, pull_request]
 jobs:
   test:
-    name: Test
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,5 +23,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - name: Lint
-        run: make lint
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
