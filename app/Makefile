@@ -56,4 +56,8 @@ deps:
 	go install github.com/amacneil/dbmate/v2@v2.14.0
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 
-.PHONY: help tidy build clean run run/live test test/live lint lint/fix sqlc deps
+## deploy: deploy the app (run ./deploy/deploy.sh)
+deploy:
+	./deploy/deploy.sh
+
+.PHONY: help tidy build clean run run/live test test/live lint lint/fix sqlc deps deploy

@@ -5,5 +5,5 @@ sql:
     schema: "schema.sql"
     gen:
       go:
-        package: "datastore"
-        out: "../internal/datastore"
+        package: "repository"
+        out: "../internal/repository"
