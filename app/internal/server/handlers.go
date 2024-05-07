@@ -2,10 +2,11 @@ package server
 
 import (
 	"database/sql"
-	"embed"
 	"html/template"
 	"log/slog"
 	"net/http"
+
+	"github.com/dlisboa/gonew/app/internal/templates"
 )
 
 type Handlers struct {
@@ -14,7 +15,7 @@ type Handlers struct {
 	db     *sql.DB
 }
 
-func (h *Handlers) NewServeMux() *http.ServeMux {
+func (h *Handlers) NewRouter() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /{$}", h.Index())
@@ -25,11 +26,8 @@ func (h *Handlers) NewServeMux() *http.ServeMux {
 	return mux
 }
 
-//go:embed templates
-var templatesFS embed.FS
-
 func (h *Handlers) Index() http.Handler {
-	tmpl := template.Must(template.ParseFS(templatesFS, "templates/index.html.tmpl"))
+	tmpl := template.Must(template.ParseFS(templates.FS, "pages/index.html"))
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := tmpl.Execute(w, nil)

@@ -12,9 +12,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type envFunc func(string) string
-
-func Run(ctx context.Context, args []string, getenv envFunc, out io.Writer) error {
+func Run(ctx context.Context, args []string, out io.Writer, getenv func(string) string) error {
 	cfg := config{}
 	if err := env.Parse(&cfg); err != nil {
 		return err
@@ -36,7 +34,7 @@ func Run(ctx context.Context, args []string, getenv envFunc, out io.Writer) erro
 
 	srv := http.Server{
 		Addr:    net.JoinHostPort(cfg.Host, cfg.Port),
-		Handler: handlers.NewServeMux(),
+		Handler: handlers.NewRouter(),
 	}
 
 	return srv.ListenAndServe()

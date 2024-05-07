@@ -10,8 +10,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	if err := server.Run(ctx, os.Args, os.Getenv, os.Stdout); err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+	if err := server.Run(ctx, os.Args, os.Stdout, os.Getenv); err != nil {
+		log.Fatalf("main: %s. Exiting.", err)
 	}
 }
