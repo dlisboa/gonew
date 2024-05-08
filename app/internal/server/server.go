@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/dlisboa/gonew/app/static"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -34,8 +35,8 @@ func NewServer(cfg Config, logger *slog.Logger, db *sql.DB) *Server {
 func (s *Server) routes() {
 	s.mux.Handle("GET /{$}", s.Index())
 
-	assets := http.FileServer(http.Dir("./public"))
-	s.mux.Handle("GET /public/", http.StripPrefix("/public/", assets))
+	assets := http.FileServer(http.FS(static.FS))
+	s.mux.Handle("GET /static/", http.StripPrefix("/static/", assets))
 }
 
 func (s *Server) Index() http.Handler {
