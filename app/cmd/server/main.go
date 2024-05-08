@@ -13,6 +13,7 @@ import (
 	"github.com/caarlos0/env/v11"
 	_ "github.com/mattn/go-sqlite3"
 
+	"github.com/dlisboa/gonew/app/internal/database"
 	"github.com/dlisboa/gonew/app/internal/server"
 )
 
@@ -27,22 +28,19 @@ func run(out io.Writer) error {
 
 	cfg := server.Config{}
 	if err := env.Parse(&cfg); err != nil {
-		return fmt.Errorf("parse config: %w", err)
+		return fmt.Errorf("cannot parse config: %w", err)
 	}
 
 	logger := newLogger(out, cfg)
 
-	db, err := sql.Open("sqlite3", cfg.DSN)
+	db, err := setupDB(cfg)
 	if err != nil {
-		return fmt.Errorf("sql open: %w", err)
-	}
-	err = db.Ping()
-	if err != nil {
-		return fmt.Errorf("db ping: %w", err)
+		return fmt.Errorf("cannot setup db: %w", err)
 	}
 	defer db.Close()
 
-	handler := server.NewServer(cfg, logger, db)
+	queries := database.New(db)
+	handler := server.NewServer(cfg, logger, queries)
 
 	srv := http.Server{
 		Addr:    net.JoinHostPort(cfg.Host, cfg.Port),
@@ -56,4 +54,16 @@ func run(out io.Writer) error {
 func newLogger(w io.Writer, cfg server.Config) *slog.Logger {
 	opts := &slog.HandlerOptions{Level: cfg.LogLevel}
 	return slog.New(slog.NewTextHandler(w, opts))
+}
+
+func setupDB(cfg server.Config) (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", cfg.DSN)
+	if err != nil {
+		return nil, err
+	}
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
