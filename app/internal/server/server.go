@@ -1,60 +1,45 @@
 package server
 
 import (
-	"context"
 	"database/sql"
-	"io"
+	"fmt"
 	"log/slog"
-	"net"
 	"net/http"
 
-	"github.com/caarlos0/env/v11"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/unrolled/render"
-
-	"github.com/dlisboa/gonew/app/internal/assets"
 )
 
-func Run(ctx context.Context, args []string, out io.Writer, getenv func(string) string) error {
-	cfg := config{}
-	if err := env.Parse(&cfg); err != nil {
-		return err
-	}
+type Server struct {
+	config Config
+	logger *slog.Logger
+	db     *sql.DB
+	mux    *http.ServeMux
+}
 
-	logger := slog.New(logHandler(out, cfg))
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.mux.ServeHTTP(w, r)
+}
 
-	db, err := sql.Open("sqlite3", cfg.DatabaseSourceName)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	r := render.New(render.Options{
-		FileSystem: &render.EmbedFileSystem{
-			FS: assets.FS,
-		},
-	})
-
-	handlers := &Handlers{
+func NewServer(cfg Config, logger *slog.Logger, db *sql.DB) *Server {
+	srv := &Server{
 		config: cfg,
 		logger: logger,
 		db:     db,
-		render: r,
+		mux:    http.NewServeMux(),
 	}
-
-	srv := http.Server{
-		Addr:    net.JoinHostPort(cfg.Host, cfg.Port),
-		Handler: handlers.NewRouter(),
-	}
-
-	logger.Info("listening on " + srv.Addr)
-	return srv.ListenAndServe()
+	srv.routes()
+	return srv
 }
 
-func logHandler(out io.Writer, cfg config) slog.Handler {
-	opts := &slog.HandlerOptions{Level: cfg.LogLevel}
-	if cfg.LogFormat == "json" {
-		return slog.NewJSONHandler(out, opts)
-	}
-	return slog.NewTextHandler(out, opts)
+func (s *Server) routes() {
+	s.mux.Handle("GET /{$}", s.Index())
+
+	assets := http.FileServer(http.Dir("./public"))
+	s.mux.Handle("GET /public/", http.StripPrefix("/public/", assets))
+}
+
+func (s *Server) Index() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, World!")
+	})
 }
