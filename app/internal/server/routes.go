@@ -2,9 +2,9 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
+	"github.com/dlisboa/gonew/app/internal/templates"
 	"github.com/dlisboa/gonew/app/static"
 )
 
@@ -17,8 +17,10 @@ func (s *server) routes() {
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
+	tpl := templates.MustParse("layout/base", "pages/home")
+
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, world!")
+		tpl.ExecuteTemplate(w, "layout/base", nil)
 	}
 }
 
