@@ -2,5 +2,5 @@ package templates
 
 import "embed"
 
-//go:embed layout/* pages/* partial/*
+//go:embed layout/* page/* partial/* error/*
 var FS embed.FS

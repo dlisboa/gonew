@@ -17,7 +17,7 @@ func (s *server) routes() {
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
-	tpl := templates.MustParse("layout/base", "pages/home")
+	tpl := templates.MustParse("layout/base", "page/home")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tpl.ExecuteTemplate(w, "layout/base", nil)
@@ -25,11 +25,15 @@ func (s *server) handleIndex() http.HandlerFunc {
 }
 
 func (s *server) handleAuthorsIndex() http.HandlerFunc {
+	errtpl := templates.MustParse("layout/error", "error/500")
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		authors, err := s.db.ListAuthors(r.Context())
+
 		if err != nil {
 			s.logger.Error("server.handleAuthorsIndex", "err", err)
-			http.Error(w, "internal error", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			errtpl.ExecuteTemplate(w, "layout/error", nil)
 			return
 		}
 
