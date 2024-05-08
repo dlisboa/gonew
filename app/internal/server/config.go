@@ -8,5 +8,3 @@ type Config struct {
 	LogLevel slog.Level `env:"LOG_LEVEL" envDefault:"info"`
 	DSN      string     `env:"DSN" envDefault:""`
 }
-
-type config = Config
