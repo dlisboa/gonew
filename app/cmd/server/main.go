@@ -11,6 +11,8 @@ import (
 	"os"
 
 	"github.com/caarlos0/env/v11"
+	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/dlisboa/gonew/app/internal/server"
 )
 
