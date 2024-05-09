@@ -9,11 +9,15 @@ import (
 )
 
 func (s *server) routes() {
-	s.mux.Handle("GET /{$}", s.handleIndex())
-	s.mux.Handle("GET /authors", s.handleAuthorsIndex())
+	mux := http.NewServeMux()
+
+	mux.Handle("GET /{$}", s.handleIndex())
+	mux.Handle("GET /authors", s.handleAuthorsIndex())
 
 	assets := http.FileServer(http.FS(static.FS))
-	s.mux.Handle("GET /static/", http.StripPrefix("/static/", assets))
+	mux.Handle("GET /static/", http.StripPrefix("/static/", assets))
+
+	s.handler = mux
 }
 
 func (s *server) handleIndex() http.HandlerFunc {

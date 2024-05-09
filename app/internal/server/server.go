@@ -8,14 +8,14 @@ import (
 )
 
 type server struct {
-	config Config
-	logger *slog.Logger
-	db     *database.Queries
-	mux    *http.ServeMux
+	config  Config
+	logger  *slog.Logger
+	db      *database.Queries
+	handler http.Handler
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.mux.ServeHTTP(w, r)
+	s.handler.ServeHTTP(w, r)
 }
 
 func NewServer(cfg Config, logger *slog.Logger, db *database.Queries) *server {
@@ -23,7 +23,6 @@ func NewServer(cfg Config, logger *slog.Logger, db *database.Queries) *server {
 		config: cfg,
 		logger: logger,
 		db:     db,
-		mux:    http.NewServeMux(),
 	}
 	srv.routes()
 	return srv
