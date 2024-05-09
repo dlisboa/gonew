@@ -7,7 +7,7 @@ func Parse(names ...string) (*template.Template, error) {
 	for _, name := range names {
 		patterns = append(patterns, name+".tmpl")
 	}
-	return template.New("").ParseFS(FS, patterns...)
+	return template.ParseFS(FS, patterns...)
 }
 
 func MustParse(names ...string) *template.Template {
