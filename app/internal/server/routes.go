@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/dlisboa/gonew/app/internal/templates"
 	"github.com/dlisboa/gonew/app/static"
@@ -12,7 +13,8 @@ func (s *server) routes() {
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /{$}", s.handleIndex())
-	mux.Handle("GET /authors", s.handleAuthorsIndex())
+	mux.Handle("GET /authors/", s.handleAuthorsIndex())
+	mux.Handle("GET /authors/{id}", s.handleAuthorsShow())
 
 	assets := http.FileServer(http.FS(static.FS))
 	mux.Handle("GET /static/", http.StripPrefix("/static/", assets))
@@ -43,5 +45,27 @@ func (s *server) handleAuthorsIndex() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(authors)
+	}
+}
+
+func (s *server) handleAuthorsShow() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.Atoi(r.PathValue("id"))
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("invalid author id"))
+			return
+		}
+
+		author, err := s.db.GetAuthor(r.Context(), int64(id))
+
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(author)
 	}
 }
