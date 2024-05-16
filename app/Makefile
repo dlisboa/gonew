@@ -58,6 +58,6 @@ deps:
 
 ## deploy: deploy the app (run ./deploy/deploy.sh)
 deploy:
-	./deploy/deploy.sh
+	./deploy.sh
 
 .PHONY: help tidy build clean run run/live test test/live lint lint/fix sqlc deps deploy
