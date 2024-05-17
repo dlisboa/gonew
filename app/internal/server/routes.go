@@ -37,7 +37,7 @@ func (s *server) handleAuthorsIndex() http.HandlerFunc {
 		authors, err := s.db.ListAuthors(r.Context())
 
 		if err != nil {
-			s.logger.Error("server.handleAuthorsIndex", "err", err)
+			s.logger.Error("cannot list authors", "err", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			errtpl.ExecuteTemplate(w, "layout/error", nil)
 			return
@@ -61,6 +61,7 @@ func (s *server) handleAuthorsShow() http.HandlerFunc {
 		author, err := s.db.GetAuthor(r.Context(), int64(id))
 
 		if err != nil {
+			s.logger.Error("cannot get author", "err", err)
 			http.NotFound(w, r)
 			return
 		}

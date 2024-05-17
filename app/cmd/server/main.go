@@ -11,7 +11,7 @@ import (
 	"os"
 
 	"github.com/caarlos0/env/v11"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 
 	"github.com/dlisboa/gonew/app/internal/database"
 	"github.com/dlisboa/gonew/app/internal/server"
@@ -57,7 +57,7 @@ func newLogger(w io.Writer, cfg server.Config) *slog.Logger {
 }
 
 func setupDB(cfg server.Config) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", cfg.DSN)
+	db, err := sql.Open("sqlite", cfg.DSN)
 	if err != nil {
 		return nil, err
 	}
