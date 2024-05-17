@@ -1,6 +1,7 @@
 bin
-deploy
 testing
 README.md
 Makefile
 Dockerfile
+deploy.sh
+.env
