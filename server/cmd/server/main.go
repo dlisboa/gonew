@@ -43,6 +43,11 @@ func main() {
 	// Shutdown timeout should be no less than the server's WriteTimeout.
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	srv.Shutdown(ctx)
+
+	err = srv.Shutdown(ctx)
+	if err != nil {
+		log.Error("shutdown error", "err", err)
+		os.Exit(1)
+	}
 	log.Info("shutdown")
 }
